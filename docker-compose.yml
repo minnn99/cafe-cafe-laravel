@@ -1,18 +1,19 @@
-version: "3"
 services:
   app:
     build:
       context: .
       dockerfile: ./php/Dockerfile
-    volumes: 
+    volumes:
       - ./curriculum/laravel:/var/laravel-curriculum
+      - ./img:/var/img
   nginx:
     image: nginx:1.23
     ports:
-      - 8080:80
+      - 8081:80
     volumes:
       - ./nginx/config/default.conf:/etc/nginx/conf.d/default.conf
       - ./curriculum/laravel:/var/laravel-curriculum
+      - ./img:/var/img
     depends_on:
       - app
   mysql:
@@ -25,4 +26,4 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
     ports:
-      - 3306:80
+      - 3307:3306
