@@ -10,7 +10,6 @@
 </div>
 
 <section class="locations">
-    <h2>人気のロケーション</h2>
     <div class="location-grid">
         <div class="location-card">
             <img src="img/cafe1.jpg" alt="東京 カフェ">
@@ -40,6 +39,27 @@
                 <p>車で40分</p>
             </div>
         </div>
+        <div class="location-card">
+            <img src="img/cafe5.jpg" alt="岡山 カフェ">
+            <div class="location-info">
+                <h3>岡山</h3>
+                <p>車で1.5時間</p>
+            </div>
+        </div>
+        <div class="location-card">
+            <img src="img/cafe6.jpg" alt="鹿児島 カフェ">
+            <div class="location-info">
+                <h3>鹿児島</h3>
+                <p>車で50分</p>
+            </div>
+        </div>
+        <div class="location-card">
+            <img src="img/cafe7.jpg" alt="沖縄 カフェ">
+            <div class="location-info">
+                <h3>沖縄</h3>
+                <p>車で2時間</p>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -67,9 +87,11 @@
 
 <section class="goto-campaign">
     <div class="campaign-content">
-        <h2>Go To Eats</h2>
-        <p>キャンペーンを利用して、全国で食事しよう。いつもと違う景色に囲まれてカラダもココロもリフレッシュ。</p>
-        <img src="img/goto.jpg" alt="Go To Eats キャンペーン">
+        <div class="goto-text">
+            <h1>Go To Eats</h1>
+            <p>キャンペーンを利用して、全国で食事しよう。</br>いつもと違う景色に囲まれてカラダもココロもリフレッシュ。</p>
+        </div>
+        <img src="img/goto.jpg" alt="Go To Eats">
     </div>
 </section>
 

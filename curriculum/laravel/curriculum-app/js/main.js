@@ -3,11 +3,18 @@
 document.addEventListener("DOMContentLoaded", function () {
   // モバイルメニューの処理
   const hamburger = document.querySelector(".hamburger");
-  const navMenu = document.querySelector(".nav-menu");
+  const hamburgerMenu = document.querySelector(".hamburger-menu");
 
   if (hamburger) {
     hamburger.addEventListener("click", function () {
-      navMenu.classList.toggle("active");
+      hamburgerMenu.classList.toggle("active");
+    });
+
+    // 메뉴 외부 클릭 시 닫기
+    document.addEventListener("click", function (e) {
+      if (!hamburger.contains(e.target)) {
+        hamburgerMenu.classList.remove("active");
+      }
     });
   }
 
@@ -22,18 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
           behavior: "smooth",
         });
       }
-    });
-  });
-
-  // カードのホバーエフェクト
-  const cards = document.querySelectorAll(".location-card, .intro-card, .experience-card, .host-card");
-  cards.forEach((card) => {
-    card.addEventListener("mouseenter", function () {
-      this.style.transform = "translateY(-5px)";
-    });
-
-    card.addEventListener("mouseleave", function () {
-      this.style.transform = "translateY(0)";
     });
   });
 
