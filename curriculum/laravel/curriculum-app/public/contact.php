@@ -1,27 +1,26 @@
 <?php
+session_start(); // セッション開始
+
+// 必要なクラスファイルをインクルード
+require_once '../includes/ContactValidator.php';
+require_once '../includes/ContactFormHandler.php';
+
 $title = 'お問い合わせ - CafeCafe';
 
-// フォーム送信処理
-$message_sent = false;
-$error_message = '';
+// フォームハンドラーを初期化
+$formHandler = new ContactFormHandler();
 
+// POSTリクエスト処理
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = trim($_POST['name'] ?? '');
-    $furigana = trim($_POST['furigana'] ?? '');
-    $phone = trim($_POST['phone'] ?? '');
-    $email = trim($_POST['email'] ?? '');
-    $message = trim($_POST['message'] ?? '');
-    
-    // バリデーション
-    if (empty($name) || empty($furigana) || empty($email) || empty($message)) {
-        $error_message = '必須項目を全て入力してください。';
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error_message = '正しいメールアドレスを入力してください。';
-    } else {
-        // 実際のアプリケーションでは、ここでメール送信やデータベース保存を行う
-        $message_sent = true;
-    }
+    $formHandler->handleRequest($_POST);
+    $formHandler->redirect(); // PRGパターン
 }
+
+// メッセージとフォームデータを取得
+$messages = $formHandler->getMessages();
+$message_sent = $messages['message_sent'];
+$field_errors = $messages['field_errors'];
+$form_data = $formHandler->getFormData();
 
 include '../view/header.php';
 ?>
@@ -39,12 +38,6 @@ include '../view/header.php';
                         <p><a href="contact.php" class="back-link">新しいお問い合わせをする</a></p>
                     </div>
                 <?php else: ?>
-                    <?php if (!empty($error_message)): ?>
-                        <div class="error-message">
-                            <p><?php echo htmlspecialchars($error_message); ?></p>
-                        </div>
-                    <?php endif; ?>
-                    
                     <div class="contact-info">
                         <p>送信頂いた件につきましては、当社より折り返しご連絡を差し上げます。</p>
                         <p>なお、ご連絡までに、お時間を頂く場合もございますので予めご了承ください。</p>
@@ -56,40 +49,40 @@ include '../view/header.php';
                             <label for="name" class="form-label">
                                 氏名<span class="required">*</span>
                             </label>
-                            <div class="error-text" id="name-error"></div>
-                            <input type="text" placeholder="山田太郎" id="name" name="name" class="form-input" value="<?php echo htmlspecialchars($name ?? ''); ?>" required>
+                            <div class="error-text" id="name-error"><?php echo htmlspecialchars($field_errors['name'] ?? ''); ?></div>
+                            <input type="text" placeholder="山田太郎" id="name" name="name" class="form-input" value="<?php echo htmlspecialchars($form_data['name'] ?? ''); ?>" required>
                         </div>
 
                         <div class="form-group">
                             <label for="furigana" class="form-label">
                                 フリガナ<span class="required">*</span>
                             </label>
-                            <div class="error-text" id="furigana-error"></div>
-                            <input type="text" placeholder="ヤマダタロウ" id="furigana" name="furigana" class="form-input" value="<?php echo htmlspecialchars($furigana ?? ''); ?>" required>
+                            <div class="error-text" id="furigana-error"><?php echo htmlspecialchars($field_errors['furigana'] ?? ''); ?></div>
+                            <input type="text" placeholder="ヤマダタロウ" id="furigana" name="furigana" class="form-input" value="<?php echo htmlspecialchars($form_data['furigana'] ?? ''); ?>" required>
                         </div>
 
                         <div class="form-group">
                             <label for="phone" class="form-label">
                                 電話番号
                             </label>
-                            <div class="error-text" id="phone-error"></div>
-                            <input type="tel" placeholder="09012345678" id="phone" name="phone" class="form-input" value="<?php echo htmlspecialchars($phone ?? ''); ?>">
+                            <div class="error-text" id="phone-error"><?php echo htmlspecialchars($field_errors['phone'] ?? ''); ?></div>
+                            <input type="tel" placeholder="09012345678" id="phone" name="phone" class="form-input" value="<?php echo htmlspecialchars($form_data['phone'] ?? ''); ?>">
                         </div>
 
                         <div class="form-group">
                             <label for="email" class="form-label">
                                 メールアドレス<span class="required">*</span>
                             </label>
-                            <div class="error-text" id="email-error"></div>
-                            <input type="email" placeholder="yamadatarou@example.com" id="email" name="email" class="form-input" value="<?php echo htmlspecialchars($email ?? ''); ?>" required>
+                            <div class="error-text" id="email-error"><?php echo htmlspecialchars($field_errors['email'] ?? ''); ?></div>
+                            <input type="email" placeholder="yamadatarou@example.com" id="email" name="email" class="form-input" value="<?php echo htmlspecialchars($form_data['email'] ?? ''); ?>" required>
                         </div>
 
                         <div class="form-group">
                             <label for="message" class="form-label">
                                 お問い合わせ内容をご記入ください<span class="required">*</span>
                             </label>
-                            <div class="error-text" id="message-error"></div>
-                            <textarea id="message" name="message" class="form-textarea" rows="6" required><?php echo htmlspecialchars($message ?? ''); ?></textarea>
+                            <div class="error-text" id="message-error"><?php echo htmlspecialchars($field_errors['message'] ?? ''); ?></div>
+                            <textarea id="message" name="message" class="form-textarea" rows="6" required><?php echo htmlspecialchars($form_data['message'] ?? ''); ?></textarea>
                         </div>
 
                         <div class="form-submit">

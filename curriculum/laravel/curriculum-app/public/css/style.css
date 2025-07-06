@@ -513,7 +513,8 @@ section h2 {
   margin-bottom: 5px;
 }
 
-.error-text.show {
+.error-text.show,
+.error-text:not(:empty) {
   display: block;
 }
 
