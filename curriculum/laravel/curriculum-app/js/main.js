@@ -1,125 +1,175 @@
-// CafeCafe JavaScript
+// CafeCafe JavaScript - リファクタリング済み
 
-document.addEventListener("DOMContentLoaded", function () {
-  // モバイルメニューの処理
-  const hamburger = document.querySelector(".hamburger");
-  const hamburgerMenu = document.querySelector(".hamburger-menu");
+class CafeCafeApp {
+  constructor() {
+    this.elements = {
+      hamburger: document.querySelector(".hamburger"),
+      hamburgerMenu: document.querySelector(".hamburger-menu"),
+      header: document.querySelector(".header"),
+      alert: document.querySelector(".alert"),
+      mainContent: document.querySelector(".main-content"),
+    };
 
-  if (hamburger) {
-    hamburger.addEventListener("click", function () {
+    this.scrollToTopButton = null;
+    this.isScrolling = false;
+
+    this.init();
+  }
+
+  init() {
+    this.initMobileMenu(); // モバイルメニューの初期化
+    this.initSmoothScroll(); // スムーススクロールの初期化
+    this.createScrollToTopButton(); // スクロールトップボタンの作成
+    this.initScrollHandler(); // スクロールハンドラーの初期化
+    this.setInitialState(); // 初期状態の設定
+  }
+
+  // モバイルメニューの初期化
+  initMobileMenu() {
+    const { hamburger, hamburgerMenu } = this.elements;
+
+    if (!hamburger || !hamburgerMenu) return;
+
+    hamburger.addEventListener("click", (e) => {
+      e.stopPropagation();
       hamburgerMenu.classList.toggle("active");
     });
 
-    // 메뉴 외부 클릭 시 닫기
-    document.addEventListener("click", function (e) {
+    // メニュー外クリックでメニューを閉じる
+    document.addEventListener("click", (e) => {
       if (!hamburger.contains(e.target)) {
         hamburgerMenu.classList.remove("active");
       }
     });
   }
 
-  // スムーススクロール
-  const links = document.querySelectorAll('a[href^="#"]');
-  links.forEach((link) => {
-    link.addEventListener("click", function (e) {
-      e.preventDefault();
-      const target = document.querySelector(this.getAttribute("href"));
-      if (target) {
-        target.scrollIntoView({
-          behavior: "smooth",
+  // スムーススクロールの初期化
+  initSmoothScroll() {
+    const links = document.querySelectorAll('a[href^="#"]');
+
+    links.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute("href");
+        const target = document.querySelector(targetId);
+
+        if (target) {
+          target.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      });
+    });
+  }
+
+  // スクロールトップボタンの作成
+  createScrollToTopButton() {
+    this.scrollToTopButton = document.createElement("button");
+    this.scrollToTopButton.innerHTML = "Jump to Top";
+    this.scrollToTopButton.className = "scroll-to-top";
+    this.scrollToTopButton.setAttribute("aria-label", "ページの上部に戻る");
+
+    // ホバー効果
+    this.addScrollButtonHoverEffects();
+
+    // クリックイベント
+    this.scrollToTopButton.addEventListener("click", () => {
+      this.animateScrollToTop();
+    });
+
+    document.body.appendChild(this.scrollToTopButton);
+  }
+
+  // スクロールボタンのホバー効果
+  addScrollButtonHoverEffects() {
+    // CSSでホバー効果を処理しているため、JavaScriptでのホバーイベントは不要
+    // 必要に応じて追加のホバーロジックをここに実装可能
+  }
+
+  // スクロールトップアニメーション
+  animateScrollToTop() {
+    // クリックアニメーション効果（CSSベース）
+    this.scrollToTopButton.classList.add("clicked");
+
+    setTimeout(() => {
+      this.scrollToTopButton.classList.remove("clicked");
+    }, 200);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
+  // スクロールハンドラーの初期化
+  initScrollHandler() {
+    let ticking = false;
+
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          this.handleScroll();
+          ticking = false;
         });
+        ticking = true;
       }
     });
-  });
+  }
 
-  // ページトップボタン
-  const scrollToTop = document.createElement("button");
-  scrollToTop.innerHTML = "Jump to Top";
-  scrollToTop.className = "scroll-to-top";
-  scrollToTop.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: #111;
-        color: white;
-        border: none;
-        font-size: 1rem;
-        height: 50px;
-        width: 120px;
-        border-radius: 25px;
-        cursor: pointer;
-        z-index: 1000;
-        transform: translateY(100px);
-        opacity: 0;
-        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    `;
-
-  // ホバー効果追加
-  scrollToTop.addEventListener("mouseenter", function () {
-    this.style.background = "#333";
-    this.style.transform = this.style.transform.replace("translateY(0px)", "translateY(-5px)");
-  });
-
-  scrollToTop.addEventListener("mouseleave", function () {
-    this.style.background = "#111";
-    this.style.transform = this.style.transform.replace("translateY(-5px)", "translateY(0px)");
-  });
-
-  document.body.appendChild(scrollToTop);
-
-  // ヘッダーとアラートのスクロール処理
-  const header = document.querySelector(".header");
-  const alert = document.querySelector(".alert");
-  const mainContent = document.querySelector(".main-content");
-  window.addEventListener("scroll", function () {
+  // スクロール処理
+  handleScroll() {
     const scrollTop = window.pageYOffset;
 
-    // スクロール位置に応じてヘッダーとアラートの表示を制御
+    this.updateHeaderState(scrollTop); // ヘッダーの状態更新
+    this.updateScrollToTopButton(scrollTop); // スクロールトップボタンの表示制御
+  }
+
+  // ヘッダーの状態更新
+  updateHeaderState(scrollTop) {
+    const { header, alert } = this.elements;
+
+    if (!header || !alert) return;
+
     if (scrollTop <= 10) {
-      // 最上部にいる場合（10px以内）
+      // 最上部にいる場合
       alert.classList.add("show");
       header.classList.remove("scrolled");
       header.classList.add("with-alert");
-      // 明示的に透明背景を設定
       header.style.background = "rgba(0, 0, 0, 0)";
     } else {
       // スクロールした場合
       alert.classList.remove("show");
       header.classList.add("scrolled");
       header.classList.remove("with-alert");
-      // インラインスタイルを削除してCSSクラスが適用されるように
       header.style.background = "";
     }
-
-    // ページトップボタンの表示制御 (애니메이션 개선)
-    if (scrollTop > 300) {
-      scrollToTop.style.transform = "translateY(0px)";
-      scrollToTop.style.opacity = "1";
-    } else {
-      scrollToTop.style.transform = "translateY(100px)";
-      scrollToTop.style.opacity = "0";
-    }
-  });
-
-  // 初期状態でアラートを表示
-  if (window.pageYOffset <= 10) {
-    alert.classList.add("show");
-    header.classList.add("with-alert");
-    // 初期状態で透明背景を設定
-    header.style.background = "rgba(0, 0, 0, 0)";
   }
 
-  scrollToTop.addEventListener("click", function () {
-    // 클릭 애니메이션 효과
-    this.style.transform = this.style.transform.replace("translateY(0px)", "translateY(-10px)");
-    setTimeout(() => {
-      this.style.transform = this.style.transform.replace("translateY(-10px)", "translateY(0px)");
-    }, 100);
+  // スクロールトップボタンの表示制御
+  updateScrollToTopButton(scrollTop) {
+    if (!this.scrollToTopButton) return;
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  });
+    if (scrollTop > 300) {
+      this.scrollToTopButton.classList.add("visible");
+    } else {
+      this.scrollToTopButton.classList.remove("visible");
+    }
+  }
+
+  // 初期状態の設定
+  setInitialState() {
+    const { header, alert } = this.elements;
+
+    if (window.pageYOffset <= 10 && header && alert) {
+      alert.classList.add("show");
+      header.classList.add("with-alert");
+      header.style.background = "rgba(0, 0, 0, 0)";
+    }
+  }
+}
+
+// アプリケーションの初期化
+document.addEventListener("DOMContentLoaded", () => {
+  new CafeCafeApp();
 });

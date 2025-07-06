@@ -38,10 +38,10 @@
                     <img src="img/menu.png" alt="mobile menu">
                     <div class="hamburger-menu">
                         <ul>
-                            <li><a href="javaScript:void(0);" class="signin-btn">サインイン</a></li>
-                            <li><a href="javaScript:void(0);" class="nav-link">はじめに</a></li>
-                            <li><a href="javaScript:void(0);" class="nav-link">体験</a></li>
-                            <li><a href="javaScript:void(0);" class="nav-link">お問い合わせ</a></li>
+                            <li><a href="javaScript:void(0);" class="ham-signin-btn">サインイン</a></li>
+                            <li><a href="javaScript:void(0);" class="ham-nav-link">はじめに</a></li>
+                            <li><a href="javaScript:void(0);" class="ham-nav-link">体験</a></li>
+                            <li><a href="javaScript:void(0);" class="ham-nav-link">お問い合わせ</a></li>
                         </ul>
                     </div>
                 </div>
