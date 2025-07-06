@@ -14,20 +14,20 @@
         <nav class="navbar">
             <div class="nav-container">
                 <div class="nav-logo">
-                    <a href="javaScript:void(0);">
+                    <a href="index.php">
                         <img src="img/logo.png" alt="CafeCafe Logo" class="logo">
                     </a>
                 </div>
                 <div class="nav-menu">
                     <ul class="nav-list">
                         <li class="nav-item">
-                            <a href="javaScript:void(0);" class="nav-link">ホーム</a>
+                            <a href="index.php#locations" class="nav-link">はじめに</a>
                         </li>
                         <li class="nav-item">
-                            <a href="javaScript:void(0);" class="nav-link">体験</a>
+                            <a href="index.php#experiences" class="nav-link">体験</a>
                         </li>
                         <li class="nav-item">
-                            <a href="javaScript:void(0);" class="nav-link">お問い合わせ</a>
+                            <a href="contact.php" class="nav-link">お問い合わせ</a>
                         </li>
                     </ul>
                 </div>
@@ -39,9 +39,9 @@
                     <div class="hamburger-menu">
                         <ul>
                             <li><a href="javaScript:void(0);" class="ham-signin-btn">サインイン</a></li>
-                            <li><a href="javaScript:void(0);" class="ham-nav-link">はじめに</a></li>
-                            <li><a href="javaScript:void(0);" class="ham-nav-link">体験</a></li>
-                            <li><a href="javaScript:void(0);" class="ham-nav-link">お問い合わせ</a></li>
+                            <li><a href="index.php#locations" class="ham-nav-link">はじめに</a></li>
+                            <li><a href="index.php#experiences" class="ham-nav-link">体験</a></li>
+                            <li><a href="contact.php" class="ham-nav-link">お問い合わせ</a></li>
                         </ul>
                     </div>
                 </div>

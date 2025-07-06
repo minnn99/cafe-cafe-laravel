@@ -1,15 +1,16 @@
+<?php
+$title = 'CafeCafe - あなたの好きな空間を作る';
+include 'header.php';
+?>
+
 <!-- メインコンテンツ -->
 <div class="hero">
-    <?php 
-    $title = 'CafeCafe - あなたの好きな空間を作る';
-    include 'header.php'; 
-    ?>
     <div class="hero-content">
-        <h1>あなたの</br>好きな空間を作る。</h1>
+        <h1>あなたの<br />好きな空間を作る。</h1>
     </div>
 </div>
 
-<section class="locations">
+<section class="locations" id="locations">
     <div class="location-grid">
         <div class="location-card">
             <img src="img/cafe1.jpg" alt="東京 カフェ">
@@ -95,7 +96,7 @@
     </div>
 </section>
 
-<section class="experiences">
+<section class="experiences" id="experiences">
     <h2>カフェ作りを体験しよう</h2>
     <p>お店のエキスパートが案内するユニークな体験（直接対面型またはオンライン）。</p>
     <div class="experience-grid">

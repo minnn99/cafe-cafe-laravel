@@ -5,6 +5,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
   line-height: 1.6;
@@ -64,6 +68,7 @@ a:hover,
   position: fixed;
   top: 0;
   width: 100%;
+  z-index: 1000;
   transform: translateY(-100%);
   transition: transform 0.3s ease;
 }
@@ -216,7 +221,6 @@ a:hover,
 
 /* Main Content */
 .main-content {
-  margin-top: 70px;
   transition: margin-top 0.3s ease;
 }
 
@@ -225,10 +229,13 @@ a:hover,
   background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("../img/eyecatch.jpg");
   background-size: cover;
   background-position: center;
-  height: 100dvh;
+  height: 100vh;
   display: flex;
   align-items: center;
   color: var(--white-text-color);
+  position: relative;
+  top: 0;
+  margin-top: 0;
 }
 
 .hero-content h1 {
@@ -242,6 +249,11 @@ a:hover,
 section {
   padding: 0 5%;
   margin: 60px 0;
+}
+
+/* 히어로 섹션 다음에 오는 첫 번째 섹션에만 상단 여백 추가 */
+.hero + section {
+  margin-top: 120px;
 }
 
 section h2 {
@@ -314,7 +326,6 @@ section h2 {
   height: 100%;
   object-fit: cover;
   border-radius: 12px;
-  margin-bottom: 8px;
 }
 
 .experience-card h3,
