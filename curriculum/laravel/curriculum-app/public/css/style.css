@@ -518,56 +518,6 @@ section h2 {
   margin-top: 4px;
 }
 
-/* Responsive Design */
-@media screen and (max-width: 1024px) {
-  .location-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-@media screen and (max-width: 896px) {
-  .goto-text {
-    position: static;
-    top: unset;
-    left: unset;
-  }
-  .nav-menu {
-    display: none;
-  }
-  .nav-container {
-    display: flex;
-    justify-content: space-between;
-    height: 100px;
-  }
-  .nav-auth {
-    display: none;
-  }
-  .hamburger {
-    display: block;
-  }
-}
-@media screen and (max-width: 768px) {
-  .hero-content h1 {
-    font-size: 2rem;
-  }
-  .hero-content p {
-    font-size: 1rem;
-  }
-  section h2 {
-    font-size: 2rem;
-  }
-  .footer-bottom {
-    flex-direction: column;
-    text-align: center;
-  }
-  .location-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .goto-text {
-    top: 25px;
-    left: 25px;
-  }
-}
-
 /* Contact Page Styles */
 .contact-section {
   padding: 90px 5% 60px;
@@ -768,10 +718,35 @@ section h2 {
   background: var(--primary-hover-color);
 }
 
-/* Contact Page Responsive */
-@media (max-width: 768px) {
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
+  .location-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 896px) {
+  .goto-text {
+    position: static;
+    top: unset;
+    left: unset;
+  }
+  .nav-menu {
+    display: none;
+  }
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    height: 100px;
+  }
+  .nav-auth {
+    display: none;
+  }
+  .hamburger {
+    display: block;
+  }
   .contact-section {
-    padding: 100px 3% 40px;
+    padding: 160px 3% 40px;
   }
 
   .contact-title {
@@ -780,9 +755,36 @@ section h2 {
   }
 
   .contact-form-container {
+    width: 90%;
     padding: 25px;
   }
+}
 
+@media screen and (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+  .hero-content p {
+    font-size: 1rem;
+  }
+  section h2 {
+    font-size: 2rem;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+  .location-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .goto-text {
+    top: 25px;
+    left: 25px;
+  }
+}
+
+/* Contact Page Responsive */
+@media screen and (max-width: 768px) {
   .form-subtitle {
     font-size: 1.1rem;
   }
@@ -794,9 +796,9 @@ section h2 {
   }
 }
 
-@media (max-width: 480px) {
+@media screen and (max-width: 480px) {
   .contact-section {
-    padding: 90px 2% 30px;
+    padding: 150px 2% 30px;
   }
 
   .contact-title {
