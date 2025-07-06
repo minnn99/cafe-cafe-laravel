@@ -7,10 +7,17 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <?php 
+    // contactページ以外の場合のみアラートを表示
+    $current_page = basename($_SERVER['PHP_SELF'], '.php');
+    if ($current_page !== 'contact'): 
+    ?>
     <div class="alert">
         <a href="javascript:void(0);">新型コロナウイルスに対する取り組みの最新情報をご案内</a>
     </div>
-    <header class="header">
+    <?php endif; ?>
+    
+    <header class="header <?php echo ($current_page === 'contact') ? 'scrolled contact-header' : ''; ?>">
         <nav class="navbar">
             <div class="nav-container">
                 <div class="nav-logo">

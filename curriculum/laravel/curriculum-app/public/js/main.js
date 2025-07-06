@@ -18,10 +18,20 @@ class CafeCafeApp {
 
   init() {
     this.initMobileMenu(); // モバイルメニューの初期化
-    this.initSmoothScroll(); // スムーススクロールの初期化
-    this.createScrollToTopButton(); // スクロールトップボタンの作成
+    this.initSmoothScroll(); // スムーズスクロールの初期化
+
+    // contactページでない場合のみスクロールトップボタンを作成
+    if (!this.isContactPage()) {
+      this.createScrollToTopButton(); // スクロールトップボタンの作成
+    }
+
     this.initScrollHandler(); // スクロールハンドラーの初期化
     this.setInitialState(); // 初期状態の設定
+  }
+
+  // contactページかどうかを判定するメソッド
+  isContactPage() {
+    return window.location.pathname.includes("contact.php") || window.location.pathname.endsWith("contact");
   }
 
   // モバイルメニューの初期化
@@ -35,7 +45,7 @@ class CafeCafeApp {
       hamburgerMenu.classList.toggle("active");
     });
 
-    // メニュー外クリックでメニューを閉じる
+    // メニュー外をクリックした場合にメニューを閉じる
     document.addEventListener("click", (e) => {
       if (!hamburger.contains(e.target)) {
         hamburgerMenu.classList.remove("active");
@@ -43,7 +53,7 @@ class CafeCafeApp {
     });
   }
 
-  // スムーススクロールの初期化
+  // スムーズスクロールの初期化
   initSmoothScroll() {
     const links = document.querySelectorAll('a[href^="#"]');
 
@@ -83,7 +93,7 @@ class CafeCafeApp {
 
   // スクロールボタンのホバー効果
   addScrollButtonHoverEffects() {
-    // CSSでホバー効果を処理しているため、JavaScriptでのホバーイベントは不要
+    // ホバー効果はCSSで処理しているため、JavaScriptでのホバーイベントは不要
     // 必要に応じて追加のホバーロジックをここに実装可能
   }
 
@@ -121,11 +131,11 @@ class CafeCafeApp {
   handleScroll() {
     const scrollTop = window.pageYOffset;
 
-    this.updateHeaderState(scrollTop); // ヘッダーの状態更新
+    this.updateHeaderState(scrollTop); // ヘッダーの状態を更新
     this.updateScrollToTopButton(scrollTop); // スクロールトップボタンの表示制御
   }
 
-  // ヘッダーの状態更新
+  // ヘッダーの状態を更新
   updateHeaderState(scrollTop) {
     const { header, alert } = this.elements;
 
