@@ -27,6 +27,8 @@ class CafeCafeApp {
 
     this.initScrollHandler(); // スクロールハンドラーの初期化
     this.setInitialState(); // 初期状態の設定
+
+    this.initFormValidation(); // フォームバリデーションの初期化
   }
 
   // contactページかどうかを判定するメソッド
@@ -176,6 +178,115 @@ class CafeCafeApp {
       header.classList.add("with-alert");
       header.style.background = "rgba(0, 0, 0, 0)";
     }
+  }
+
+  // フォームバリデーションの初期化
+  initFormValidation() {
+    const form = document.querySelector(".contact-form");
+    if (!form) return;
+
+    // リアルタイムバリデーション
+    const inputs = form.querySelectorAll("input, textarea");
+    inputs.forEach((input) => {
+      input.addEventListener("blur", () => this.validateField(input));
+      input.addEventListener("input", () => this.clearError(input));
+    });
+
+    // フォーム送信時のバリデーション
+    form.addEventListener("submit", (e) => {
+      if (!this.validateForm(form)) {
+        e.preventDefault();
+      }
+    });
+  }
+
+  // 個別フィールドのバリデーション
+  validateField(field) {
+    const fieldName = field.name;
+    const value = field.value.trim();
+    let errorMessage = "";
+
+    switch (fieldName) {
+      case "name":
+        if (!value) {
+          errorMessage = "氏名は必須入力です。10文字以内で入力してください。";
+        } else if (value.length > 10) {
+          errorMessage = "氏名は10文字以内で入力してください。";
+        }
+        break;
+
+      case "furigana":
+        if (!value) {
+          errorMessage = "フリガナは必須入力です。10文字以内で入力してください。";
+        } else if (value.length > 10) {
+          errorMessage = "フリガナは10文字以内で入力してください。";
+        } else if (!/^[ァ-ヶー]+$/.test(value)) {
+          errorMessage = "フリガナはカタカナで入力してください。";
+        }
+        break;
+
+      case "phone":
+        if (value && !/^[\d-]+$/.test(value)) {
+          errorMessage = "電話番号は0-9の数字のみで入力してください。";
+        }
+        break;
+
+      case "email":
+        if (!value) {
+          errorMessage = "メールアドレスは正しく入力してください。";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          errorMessage = "メールアドレスは正しく入力してください。";
+        }
+        break;
+
+      case "message":
+        if (!value) {
+          errorMessage = "お問い合わせ内容は必須入力です。";
+        }
+        break;
+    }
+
+    this.showError(field, errorMessage);
+    return !errorMessage;
+  }
+
+  // エラー表示
+  showError(field, message) {
+    const errorElement = document.getElementById(field.name + "-error");
+    if (errorElement) {
+      errorElement.textContent = message;
+      if (message) {
+        errorElement.classList.add("show");
+        field.classList.add("error");
+      } else {
+        errorElement.classList.remove("show");
+        field.classList.remove("error");
+      }
+    }
+  }
+
+  // エラークリア
+  clearError(field) {
+    const errorElement = document.getElementById(field.name + "-error");
+    if (errorElement && field.value.trim()) {
+      errorElement.textContent = "";
+      errorElement.classList.remove("show");
+      field.classList.remove("error");
+    }
+  }
+
+  // フォーム全体のバリデーション
+  validateForm(form) {
+    const requiredFields = form.querySelectorAll("[required]");
+    let isValid = true;
+
+    requiredFields.forEach((field) => {
+      if (!this.validateField(field)) {
+        isValid = false;
+      }
+    });
+
+    return isValid;
   }
 }
 

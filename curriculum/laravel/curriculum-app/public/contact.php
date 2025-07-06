@@ -51,39 +51,44 @@ include '../view/header.php';
                         <p class="required-note"><span class="required">*</span>は必須項目となります。</p>
                     </div>
 
-                    <form class="contact-form" method="POST" action="contact.php">
+                    <form class="contact-form" method="POST" action="contact.php" novalidate>
                         <div class="form-group">
                             <label for="name" class="form-label">
                                 氏名<span class="required">*</span>
                             </label>
-                            <input type="text" id="name" name="name" class="form-input" value="<?php echo htmlspecialchars($name ?? ''); ?>" required>
+                            <div class="error-text" id="name-error"></div>
+                            <input type="text" placeholder="山田太郎" id="name" name="name" class="form-input" value="<?php echo htmlspecialchars($name ?? ''); ?>" required>
                         </div>
 
                         <div class="form-group">
                             <label for="furigana" class="form-label">
                                 フリガナ<span class="required">*</span>
                             </label>
-                            <input type="text" id="furigana" name="furigana" class="form-input" value="<?php echo htmlspecialchars($furigana ?? ''); ?>" required>
+                            <div class="error-text" id="furigana-error"></div>
+                            <input type="text" placeholder="ヤマダタロウ" id="furigana" name="furigana" class="form-input" value="<?php echo htmlspecialchars($furigana ?? ''); ?>" required>
                         </div>
 
                         <div class="form-group">
                             <label for="phone" class="form-label">
                                 電話番号
                             </label>
-                            <input type="tel" id="phone" name="phone" class="form-input" value="<?php echo htmlspecialchars($phone ?? ''); ?>">
+                            <div class="error-text" id="phone-error"></div>
+                            <input type="tel" placeholder="09012345678" id="phone" name="phone" class="form-input" value="<?php echo htmlspecialchars($phone ?? ''); ?>">
                         </div>
 
                         <div class="form-group">
                             <label for="email" class="form-label">
                                 メールアドレス<span class="required">*</span>
                             </label>
-                            <input type="email" id="email" name="email" class="form-input" value="<?php echo htmlspecialchars($email ?? ''); ?>" required>
+                            <div class="error-text" id="email-error"></div>
+                            <input type="email" placeholder="yamadatarou@example.com" id="email" name="email" class="form-input" value="<?php echo htmlspecialchars($email ?? ''); ?>" required>
                         </div>
 
                         <div class="form-group">
                             <label for="message" class="form-label">
                                 お問い合わせ内容をご記入ください<span class="required">*</span>
                             </label>
+                            <div class="error-text" id="message-error"></div>
                             <textarea id="message" name="message" class="form-textarea" rows="6" required><?php echo htmlspecialchars($message ?? ''); ?></textarea>
                         </div>
 
