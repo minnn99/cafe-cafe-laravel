@@ -12,8 +12,12 @@ $formHandler = new ContactFormHandler();
 
 // POSTリクエスト処理
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $formHandler->handleRequest($_POST);
-    $formHandler->redirect(); // PRGパターン
+    if ($formHandler->handleRequest($_POST)) {
+        // バリデーション成功時は確認画面へ
+        header('Location: confirm.php');
+        exit;
+    }
+    // バリデーションエラー時はそのまま表示
 }
 
 // メッセージとフォームデータを取得
@@ -22,6 +26,16 @@ $message_sent = $messages['message_sent'];
 $field_errors = $messages['field_errors'];
 $form_data = $formHandler->getFormData();
 
+// テスト用: URLパラメータで成功画面を表示
+if (isset($_GET['success']) && $_GET['success'] === '1') {
+    $message_sent = true;
+}
+
+// 確認ページから戻ってきた場合のデータ復元
+if (empty($form_data) && !empty($_SESSION['confirm_data'])) {
+    $form_data = $_SESSION['confirm_data'];
+}
+
 include '../view/header.php';
 ?>
 
@@ -29,13 +43,16 @@ include '../view/header.php';
     <section class="contact-section">
             <div class="contact-form-container">
                 <h1 class="contact-title">お問い合わせ</h1>
-                <h2 class="form-subtitle">下記の項目をご記入の上送信ボタンを押してください</h2>
+                <?php if (!$message_sent): ?>
+                    <h2 class="form-subtitle">下記の項目をご記入の上送信ボタンを押してください</h2>
+                <?php endif; ?>
                 
                 <?php if ($message_sent): ?>
                     <div class="success-message">
                         <p>お問い合わせありがとうございます。</p>
-                        <p>送信内容を確認の上、担当者より折り返しご連絡させていただきます。</p>
-                        <p><a href="contact.php" class="back-link">新しいお問い合わせをする</a></p>
+                        <p>送信頂いた件につきましては、当社より折り返しご連絡を差し上げます。</p>
+                        <p>なお、ご連絡までに、お時間を頂く場合もございますので予めご了承ください。</p>
+                        <p><a href="index.php" class="back-link">トップへ戻る</a></p>
                     </div>
                 <?php else: ?>
                     <div class="contact-info">

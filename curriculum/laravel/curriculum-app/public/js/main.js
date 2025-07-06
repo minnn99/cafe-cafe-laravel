@@ -31,9 +31,14 @@ class CafeCafeApp {
     this.initFormValidation(); // フォームバリデーションの初期化
   }
 
-  // contactページかどうかを判定するメソッド
+  // contactページとconfirmページかどうかを判定するメソッド
   isContactPage() {
-    return window.location.pathname.includes("contact.php") || window.location.pathname.endsWith("contact");
+    return (
+      window.location.pathname.includes("contact.php") ||
+      window.location.pathname.includes("confirm.php") ||
+      window.location.pathname.endsWith("contact") ||
+      window.location.pathname.endsWith("confirm")
+    );
   }
 
   // モバイルメニューの初期化

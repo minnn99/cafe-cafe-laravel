@@ -8,16 +8,16 @@
 </head>
 <body>
     <?php 
-    // contactページ以外の場合のみアラートを表示
+    // contactページとconfirmページ以外の場合のみアラートを表示
     $current_page = basename($_SERVER['PHP_SELF'], '.php');
-    if ($current_page !== 'contact'): 
+    if ($current_page !== 'contact' && $current_page !== 'confirm'): 
     ?>
     <div class="alert">
         <a href="javascript:void(0);">新型コロナウイルスに対する取り組みの最新情報をご案内</a>
     </div>
     <?php endif; ?>
     
-    <header class="header <?php echo ($current_page === 'contact') ? 'scrolled contact-header' : ''; ?>">
+    <header class="header <?php echo ($current_page === 'contact' || $current_page === 'confirm') ? 'scrolled contact-header' : ''; ?>">
         <nav class="navbar">
             <div class="nav-container">
                 <div class="nav-logo">

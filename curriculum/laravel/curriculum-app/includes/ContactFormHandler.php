@@ -20,8 +20,8 @@ class ContactFormHandler
     
     // バリデーションを実行
     if ($this->validator->validate($data)) {
-      // バリデーション成功時
-      $this->setSuccessMessage();
+      // バリデーション成功時、確認画面へ
+      $_SESSION['confirm_data'] = $data;
       return true;
     } else {
       // バリデーションエラー時
@@ -79,6 +79,37 @@ class ContactFormHandler
   {
     header('Location: contact.php');
     exit;
+  }
+
+  // 確認画面用のデータを取得
+  public function getConfirmData()
+  {
+    return $_SESSION['confirm_data'] ?? [];
+  }
+
+  // 最終送信処理
+  public function handleFinalSubmission()
+  {
+    $confirmData = $_SESSION['confirm_data'] ?? null;
+    
+    if ($confirmData) {
+      // 実際の送信処理（ここではメッセージ設定のみ）
+      $_SESSION['message_sent'] = true;
+      
+      // 確認データをクリア
+      unset($_SESSION['confirm_data']);
+      unset($_SESSION['form_data']);
+      unset($_SESSION['field_errors']);
+    }
+  }
+
+  // contact.phpに戻る際のフォームデータ復元
+  public function restoreFormData()
+  {
+    $confirmData = $_SESSION['confirm_data'] ?? [];
+    if (!empty($confirmData)) {
+      $_SESSION['form_data'] = $confirmData;
+    }
   }
 }
 
