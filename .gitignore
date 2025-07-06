@@ -1,0 +1,20 @@
+# MySQL 데이터베이스 파일들
+mysql/
+!mysql/.gitkeep
+
+# Docker 볼륨 관련
+.DS_Store
+*.log
+
+# IDE 관련
+.vscode/
+.idea/
+
+# OS 관련
+Thumbs.db
+*.swp
+*.swo
+
+# 임시 파일
+*.tmp
+*.temp
