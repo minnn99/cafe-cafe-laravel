@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
 ENV HOME /root
 ENV PATH $PATH:$HOME/.composer/vendor/bin

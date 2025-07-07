@@ -22,11 +22,11 @@ class ContactFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:10',
+            'name' => 'required|max:10|regex:/^[^<>\"\'&]*$/u',
             'furigana' => 'required|max:10|regex:/^[ァ-ヶー]+$/u',
             'phone' => 'nullable|regex:/^[0-9-]+$/',
-            'email' => 'required|email',
-            'message' => 'required',
+            'email' => 'required|email|regex:/^[^<>\"\'&]*@[^<>\"\'&]*$/u',
+            'message' => 'required|max:1000',
         ];
     }
 
@@ -38,13 +38,51 @@ class ContactFormRequest extends FormRequest
         return [
             'name.required' => '氏名は必須入力です。',
             'name.max' => '氏名は10文字以内で入力してください。',
+            'name.regex' => '氏名にHTML特殊文字は使用できません。',
             'furigana.required' => 'フリガナは必須入力です。',
             'furigana.max' => 'フリガナは10文字以内で入力してください。',
             'furigana.regex' => 'フリガナはカタカナで入力してください。',
-            'phone.regex' => '電話番号には半角数字しか入力出来ません。',
+            'phone.regex' => '電話番号には半角数字とハイフンのみ入力できます。',
             'email.required' => 'メールアドレスは必須入力です。',
-            'email.email' => 'メールアドレスは正しい形式でしか入力出来ません。',
+            'email.email' => 'メールアドレスは正しい形式で入力してください。',
+            'email.regex' => 'メールアドレスにHTML特殊文字は使用できません。',
             'message.required' => 'お問い合わせ内容は必須入力です。',
+            'message.max' => 'お問い合わせ内容は1000文字以内で入力してください。',
         ];
+    }
+
+    /**
+     * XSS対策として入力データをサニタイズ
+     */
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'name' => $this->sanitizeInput($this->name),
+            'furigana' => $this->sanitizeInput($this->furigana),
+            'phone' => $this->sanitizeInput($this->phone),
+            'email' => $this->sanitizeInput($this->email),
+            'message' => $this->sanitizeInput($this->message),
+        ]);
+    }
+
+    /**
+     * XSS対策のためのサニタイズ処理
+     */
+    private function sanitizeInput($input)
+    {
+        if (is_null($input)) {
+            return null;
+        }
+        
+        // HTML特殊文字をエスケープ
+        $input = htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
+        
+        // 危険なタグを削除
+        $input = strip_tags($input);
+        
+        // 余分な空白を削除
+        $input = trim($input);
+        
+        return $input;
     }
 }

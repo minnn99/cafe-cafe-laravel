@@ -6,7 +6,7 @@ use App\Http\Controllers\ContactController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// 文問い合わせ関連ルート
+// 問い合わせ関連ルート
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 Route::get('/contact/confirm', [ContactController::class, 'confirm'])->name('contact.confirm');
