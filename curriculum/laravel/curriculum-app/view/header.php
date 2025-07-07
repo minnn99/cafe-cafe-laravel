@@ -72,13 +72,6 @@
                     <label for="loginPassword">パスワード</label>
                     <input type="password" id="loginPassword" name="password" required>
                 </div>
-                <div class="login-options">
-                    <label class="remember-me">
-                        <input type="checkbox" name="remember">
-                        <span>ログイン状態を保持する</span>
-                    </label>
-                    <a href="javascript:void(0);" class="forgot-password">パスワードを忘れた方</a>
-                </div>
                 <button type="submit" class="login-submit">サインイン</button>
                 <div class="login-divider">
                     <span>または</span>

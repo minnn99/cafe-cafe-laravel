@@ -944,33 +944,6 @@ section h2 {
   box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
 }
 
-.login-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-  font-size: 0.9rem;
-}
-
-.remember-me {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
-.remember-me input {
-  margin-right: 6px;
-}
-
-.forgot-password {
-  color: var(--primary-color);
-  text-decoration: none;
-}
-
-.forgot-password:hover {
-  text-decoration: underline;
-}
-
 .login-submit {
   width: 100%;
   padding: 14px;
@@ -1051,11 +1024,5 @@ section h2 {
   .login-header,
   .login-form {
     padding: 20px;
-  }
-
-  .login-options {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
   }
 }
