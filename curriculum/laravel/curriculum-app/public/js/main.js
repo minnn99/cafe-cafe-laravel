@@ -199,8 +199,11 @@ class CafeCafeApp {
 
     // フォーム送信時のバリデーション
     form.addEventListener("submit", (e) => {
-      if (!this.validateForm(form)) {
+      const validationResult = this.validateFormWithAlert(form);
+      if (!validationResult.isValid) {
         e.preventDefault();
+        // エラーメッセージをalertで表示
+        alert(validationResult.errorMessage);
       }
     });
   }
@@ -231,8 +234,8 @@ class CafeCafeApp {
         break;
 
       case "phone":
-        if (value && !/^[\d-]+$/.test(value)) {
-          errorMessage = "電話番号は0-9の数字のみで入力してください。";
+        if (value && !/^[0-9-]+$/.test(value)) {
+          errorMessage = "電話番号には半角数字しか入力出来ません。";
         }
         break;
 
@@ -292,6 +295,62 @@ class CafeCafeApp {
     });
 
     return isValid;
+  }
+
+  // Alert付きフォームバリデーション
+  validateFormWithAlert(form) {
+    const requiredFields = form.querySelectorAll("[required]");
+    const errorMessages = [];
+
+    requiredFields.forEach((field) => {
+      const fieldName = field.name;
+      const value = field.value.trim();
+
+      switch (fieldName) {
+        case "name":
+          if (!value) {
+            errorMessages.push("氏名は必須入力です。10文字以内で入力してください。");
+          } else if (value.length > 10) {
+            errorMessages.push("氏名は10文字以内で入力してください。");
+          }
+          break;
+
+        case "furigana":
+          if (!value) {
+            errorMessages.push("フリガナは必須入力です。10文字以内で入力してください。");
+          } else if (value.length > 10) {
+            errorMessages.push("フリガナは10文字以内で入力してください。");
+          } else if (!/^[ァ-ヶー]+$/.test(value)) {
+            errorMessages.push("フリガナはカタカナで入力してください。");
+          }
+          break;
+
+        case "email":
+          if (!value) {
+            errorMessages.push("メールアドレスは正しく入力してください。");
+          } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+            errorMessages.push("メールアドレスは正しく入力してください。");
+          }
+          break;
+
+        case "message":
+          if (!value) {
+            errorMessages.push("お問い合わせ内容は必須入力です。");
+          }
+          break;
+      }
+    });
+
+    // 電話番号は任意フィールドなので別途チェック
+    const phoneField = form.querySelector('[name="phone"]');
+    if (phoneField && phoneField.value.trim() && !/^[0-9-]+$/.test(phoneField.value.trim())) {
+      errorMessages.push("電話番号には半角数字しか入力出来ません。");
+    }
+
+    return {
+      isValid: errorMessages.length === 0,
+      errorMessage: errorMessages.length > 0 ? errorMessages.join("\n") : "",
+    };
   }
 }
 

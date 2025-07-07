@@ -26,10 +26,10 @@ $message_sent = $messages['message_sent'];
 $field_errors = $messages['field_errors'];
 $form_data = $formHandler->getFormData();
 
-// テスト用: URLパラメータで成功画面を表示
-if (isset($_GET['success']) && $_GET['success'] === '1') {
-    $message_sent = true;
-}
+// // テスト用: URLパラメータで成功画面を表示
+// if (isset($_GET['success']) && $_GET['success'] === '1') {
+//     $message_sent = true;
+// }
 
 // 確認ページから戻ってきた場合のデータ復元
 if (empty($form_data) && !empty($_SESSION['confirm_data'])) {

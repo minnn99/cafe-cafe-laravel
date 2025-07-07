@@ -25,8 +25,8 @@ class ContactValidator
     }
     
     // 電話番号の検証（任意）
-    if (!empty($data['phone']) && !preg_match('/^[\d-]+$/', $data['phone'])) {
-      $this->errors['phone'] = '電話番号は0-9の数字とハイフンのみで入力してください。';
+    if (!empty($data['phone']) && !preg_match('/^[0-9-]+$/', $data['phone'])) {
+      $this->errors['phone'] = '電話番号には半角数字しか入力出来ません。';
     }
     
     // メールアドレスの検証
