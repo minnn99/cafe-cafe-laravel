@@ -1,7 +1,8 @@
-// CafeCafe JavaScript - リファクタリング済み
+// CafeCafe JavaScript - メイン機能管理クラス
 
 class CafeCafeApp {
   constructor() {
+    // DOM要素をまとめて管理
     this.elements = {
       hamburger: document.querySelector(".hamburger"),
       hamburgerMenu: document.querySelector(".hamburger-menu"),
@@ -11,44 +12,44 @@ class CafeCafeApp {
     };
 
     this.scrollToTopButton = null;
-    this.isScrolling = false;
-
     this.init();
   }
 
+  // アプリケーションの初期化
   init() {
-    this.initMobileMenu(); // モバイルメニューの初期化
-    this.initSmoothScroll(); // スムーズスクロールの初期化
-
-    // contactページでない場合のみスクロールトップボタンを作成
+    this.initMobileMenu();           // モバイルメニューの初期化
+    this.initSmoothScroll();         // スムーズスクロールの初期化
+    
+    // contactページとconfirmページ以外でのみスクロールボタンを作成
     if (!this.isContactPage()) {
       this.createScrollToTopButton(); // スクロールトップボタンの作成
     }
 
-    this.initScrollHandler(); // スクロールハンドラーの初期化
-    this.setInitialState(); // 初期状態の設定
-
-    this.initFormValidation(); // フォームバリデーションの初期化
+    this.initScrollHandler();        // スクロールイベントの初期化
+    this.setInitialState();          // 初期状態の設定
+    this.initFormValidation();       // フォームバリデーションの初期化
+    this.initLoginModal();           // ログインモーダルの初期化
   }
 
-  // contactページとconfirmページかどうかを判定するメソッド
+  // contactページまたはconfirmページかどうかを判定
   isContactPage() {
+    const pathname = window.location.pathname;
     return (
-      window.location.pathname.includes("contact.php") ||
-      window.location.pathname.includes("confirm.php") ||
-      window.location.pathname.endsWith("contact") ||
-      window.location.pathname.endsWith("confirm")
+      pathname.includes("contact.php") ||
+      pathname.includes("confirm.php") ||
+      pathname.endsWith("contact") ||
+      pathname.endsWith("confirm")
     );
   }
 
-  // モバイルメニューの初期化
+  // モバイルハンバーガーメニューの初期化
   initMobileMenu() {
     const { hamburger, hamburgerMenu } = this.elements;
-
     if (!hamburger || !hamburgerMenu) return;
 
+    // ハンバーガーボタンクリック時の処理
     hamburger.addEventListener("click", (e) => {
-      e.stopPropagation();
+      e.stopPropagation(); // イベントの伝播を防ぐ
       hamburgerMenu.classList.toggle("active");
     });
 
@@ -60,70 +61,56 @@ class CafeCafeApp {
     });
   }
 
-  // スムーズスクロールの初期化
+  // ページ内リンクのスムーズスクロール機能
   initSmoothScroll() {
-    const links = document.querySelectorAll('a[href^="#"]');
-
-    links.forEach((link) => {
+    const hashLinks = document.querySelectorAll('a[href^="#"]');
+    
+    hashLinks.forEach((link) => {
       link.addEventListener("click", (e) => {
         e.preventDefault();
         const targetId = link.getAttribute("href");
-        const target = document.querySelector(targetId);
-
-        if (target) {
-          target.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          targetElement.scrollIntoView({ 
+            behavior: "smooth", 
+            block: "start" 
           });
         }
       });
     });
   }
 
-  // スクロールトップボタンの作成
+  // ページトップに戻るボタンを作成
   createScrollToTopButton() {
+    // ボタン要素を作成
     this.scrollToTopButton = document.createElement("button");
     this.scrollToTopButton.innerHTML = "Jump to Top";
     this.scrollToTopButton.className = "scroll-to-top";
     this.scrollToTopButton.setAttribute("aria-label", "ページの上部に戻る");
 
-    // ホバー効果
-    this.addScrollButtonHoverEffects();
-
-    // クリックイベント
+    // クリック時のイベント処理
     this.scrollToTopButton.addEventListener("click", () => {
-      this.animateScrollToTop();
+      // クリックアニメーション効果を追加
+      this.scrollToTopButton.classList.add("clicked");
+      setTimeout(() => {
+        this.scrollToTopButton.classList.remove("clicked");
+      }, 200);
+      
+      // ページトップにスムーズスクロール
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
+    // ページにボタンを追加
     document.body.appendChild(this.scrollToTopButton);
   }
 
-  // スクロールボタンのホバー効果
-  addScrollButtonHoverEffects() {
-    // ホバー効果はCSSで処理しているため、JavaScriptでのホバーイベントは不要
-    // 必要に応じて追加のホバーロジックをここに実装可能
-  }
-
-  // スクロールトップアニメーション
-  animateScrollToTop() {
-    // クリックアニメーション効果（CSSベース）
-    this.scrollToTopButton.classList.add("clicked");
-
-    setTimeout(() => {
-      this.scrollToTopButton.classList.remove("clicked");
-    }, 200);
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }
-
-  // スクロールハンドラーの初期化
+  // スクロールイベントハンドラーの初期化
   initScrollHandler() {
-    let ticking = false;
-
+    let ticking = false; // パフォーマンス最適化用フラグ
+    
     window.addEventListener("scroll", () => {
+      // requestAnimationFrameを使用してスクロール処理を最適化
       if (!ticking) {
         requestAnimationFrame(() => {
           this.handleScroll();
@@ -134,22 +121,20 @@ class CafeCafeApp {
     });
   }
 
-  // スクロール処理
+  // スクロール時の処理を実行
   handleScroll() {
     const scrollTop = window.pageYOffset;
-
-    this.updateHeaderState(scrollTop); // ヘッダーの状態を更新
-    this.updateScrollToTopButton(scrollTop); // スクロールトップボタンの表示制御
+    this.updateHeaderState(scrollTop);       // ヘッダーの状態を更新
+    this.updateScrollToTopButton(scrollTop); // スクロールボタンの表示制御
   }
 
-  // ヘッダーの状態を更新
+  // スクロール位置に応じてヘッダーの表示状態を更新
   updateHeaderState(scrollTop) {
     const { header, alert } = this.elements;
-
     if (!header || !alert) return;
 
     if (scrollTop <= 10) {
-      // 最上部にいる場合
+      // ページ最上部にいる場合
       alert.classList.add("show");
       header.classList.remove("scrolled");
       header.classList.add("with-alert");
@@ -163,21 +148,20 @@ class CafeCafeApp {
     }
   }
 
-  // スクロールトップボタンの表示制御
+  // スクロールトップボタンの表示/非表示を制御
   updateScrollToTopButton(scrollTop) {
     if (!this.scrollToTopButton) return;
-
-    if (scrollTop > 300) {
-      this.scrollToTopButton.classList.add("visible");
-    } else {
-      this.scrollToTopButton.classList.remove("visible");
-    }
+    
+    // 300px以上スクロールした時にボタンを表示
+    const shouldShow = scrollTop > 300;
+    this.scrollToTopButton.classList.toggle("visible", shouldShow);
   }
 
-  // 初期状態の設定
+  // ページ読み込み時の初期状態を設定
   setInitialState() {
     const { header, alert } = this.elements;
-
+    
+    // ページトップにいる場合の初期設定
     if (window.pageYOffset <= 10 && header && alert) {
       alert.classList.add("show");
       header.classList.add("with-alert");
@@ -185,97 +169,100 @@ class CafeCafeApp {
     }
   }
 
-  // フォームバリデーションの初期化
+  // フォームバリデーション機能の初期化
   initFormValidation() {
-    const form = document.querySelector(".contact-form");
-    if (!form) return;
+    const contactForm = document.querySelector(".contact-form");
+    if (!contactForm) return; // フォームが存在しない場合は処理を終了
 
-    // リアルタイムバリデーション
-    const inputs = form.querySelectorAll("input, textarea");
-    inputs.forEach((input) => {
+    // 入力フィールドにイベントリスナーを設定
+    const inputFields = contactForm.querySelectorAll("input, textarea");
+    inputFields.forEach((input) => {
+      // フォーカスが外れた時にバリデーション実行
       input.addEventListener("blur", () => this.validateField(input));
+      // 入力中はエラーを削除
       input.addEventListener("input", () => this.clearError(input));
     });
 
     // フォーム送信時のバリデーション
-    form.addEventListener("submit", (e) => {
-      const validationResult = this.validateFormWithAlert(form);
+    contactForm.addEventListener("submit", (e) => {
+      const validationResult = this.validateFormWithAlert(contactForm);
       if (!validationResult.isValid) {
-        e.preventDefault();
-        // エラーメッセージをalertで表示
-        alert(validationResult.errorMessage);
+        e.preventDefault(); // 送信を中止
+        alert(validationResult.errorMessage); // エラーメッセージを表示
       }
     });
   }
 
-  // 個別フィールドのバリデーション
+  // 個別フィールドのバリデーション処理
   validateField(field) {
     const fieldName = field.name;
-    const value = field.value.trim();
+    const fieldValue = field.value.trim();
     let errorMessage = "";
 
+    // フィールドごとのバリデーションルール
     switch (fieldName) {
       case "name":
-        if (!value) {
+        if (!fieldValue) {
           errorMessage = "氏名は必須入力です。10文字以内で入力してください。";
-        } else if (value.length > 10) {
+        } else if (fieldValue.length > 10) {
           errorMessage = "氏名は10文字以内で入力してください。";
         }
         break;
-
+        
       case "furigana":
-        if (!value) {
+        if (!fieldValue) {
           errorMessage = "フリガナは必須入力です。10文字以内で入力してください。";
-        } else if (value.length > 10) {
+        } else if (fieldValue.length > 10) {
           errorMessage = "フリガナは10文字以内で入力してください。";
-        } else if (!/^[ァ-ヶー]+$/.test(value)) {
+        } else if (!/^[ァ-ヶー]+$/.test(fieldValue)) {
           errorMessage = "フリガナはカタカナで入力してください。";
         }
         break;
-
+        
       case "phone":
-        if (value && !/^[0-9-]+$/.test(value)) {
+        if (fieldValue && !/^[0-9-]+$/.test(fieldValue)) {
           errorMessage = "電話番号には半角数字しか入力出来ません。";
         }
         break;
-
+        
       case "email":
-        if (!value) {
-          errorMessage = "メールアドレスは正しく入力してください。";
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-          errorMessage = "メールアドレスは正しく入力してください。";
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!fieldValue || !emailPattern.test(fieldValue)) {
+          errorMessage = "メールアドレスは正しい形式でしか入力出来ません。";
         }
         break;
-
+        
       case "message":
-        if (!value) {
+        if (!fieldValue) {
           errorMessage = "お問い合わせ内容は必須入力です。";
         }
         break;
     }
 
+    // エラーメッセージを表示
     this.showError(field, errorMessage);
-    return !errorMessage;
+    return !errorMessage; // エラーがない場合はtrue
   }
 
-  // エラー表示
+  // エラーメッセージの表示処理
   showError(field, message) {
     const errorElement = document.getElementById(field.name + "-error");
-    if (errorElement) {
-      errorElement.textContent = message;
-      if (message) {
-        errorElement.classList.add("show");
-        field.classList.add("error");
-      } else {
-        errorElement.classList.remove("show");
-        field.classList.remove("error");
-      }
-    }
+    if (!errorElement) return;
+
+    // エラーメッセージを設定
+    errorElement.textContent = message;
+    
+    // エラーがある場合はクラスを追加、ない場合は削除
+    const hasError = !!message;
+    errorElement.classList.toggle("show", hasError);
+    field.classList.toggle("error", hasError);
   }
 
-  // エラークリア
+  // エラーメッセージのクリア処理
   clearError(field) {
     const errorElement = document.getElementById(field.name + "-error");
+    
+    // フィールドに値が入力されている場合のみエラーをクリア
     if (errorElement && field.value.trim()) {
       errorElement.textContent = "";
       errorElement.classList.remove("show");
@@ -283,74 +270,141 @@ class CafeCafeApp {
     }
   }
 
-  // フォーム全体のバリデーション
+  // フォーム全体のバリデーション（シンプル版）
   validateForm(form) {
     const requiredFields = form.querySelectorAll("[required]");
-    let isValid = true;
-
-    requiredFields.forEach((field) => {
-      if (!this.validateField(field)) {
-        isValid = false;
-      }
-    });
-
-    return isValid;
+    return Array.from(requiredFields).every(field => this.validateField(field));
   }
 
-  // Alert付きフォームバリデーション
+  // フォーム送信時のバリデーション（アラート表示付き）
   validateFormWithAlert(form) {
     const requiredFields = form.querySelectorAll("[required]");
     const errorMessages = [];
 
+    // 必須フィールドのバリデーション
     requiredFields.forEach((field) => {
       const fieldName = field.name;
-      const value = field.value.trim();
+      const fieldValue = field.value.trim();
 
-      switch (fieldName) {
-        case "name":
-          if (!value) {
-            errorMessages.push("氏名は必須入力です。10文字以内で入力してください。");
-          } else if (value.length > 10) {
-            errorMessages.push("氏名は10文字以内で入力してください。");
+      // バリデーションルールを関数として定義
+      const validationRules = {
+        name: () => {
+          if (!fieldValue) return "氏名は必須入力です。10文字以内で入力してください。";
+          if (fieldValue.length > 10) return "氏名は10文字以内で入力してください。";
+          return "";
+        },
+        furigana: () => {
+          if (!fieldValue) return "フリガナは必須入力です。10文字以内で入力してください。";
+          if (fieldValue.length > 10) return "フリガナは10文字以内で入力してください。";
+          if (!/^[ァ-ヶー]+$/.test(fieldValue)) return "フリガナはカタカナで入力してください。";
+          return "";
+        },
+        email: () => {
+          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!fieldValue || !emailPattern.test(fieldValue)) {
+            return "メールアドレスは正しい形式でしか入力出来ません。";
           }
-          break;
+          return "";
+        },
+        message: () => {
+          if (!fieldValue) return "お問い合わせ内容は必須入力です。";
+          return "";
+        }
+      };
 
-        case "furigana":
-          if (!value) {
-            errorMessages.push("フリガナは必須入力です。10文字以内で入力してください。");
-          } else if (value.length > 10) {
-            errorMessages.push("フリガナは10文字以内で入力してください。");
-          } else if (!/^[ァ-ヶー]+$/.test(value)) {
-            errorMessages.push("フリガナはカタカナで入力してください。");
-          }
-          break;
-
-        case "email":
-          if (!value) {
-            errorMessages.push("メールアドレスは正しく入力してください。");
-          } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-            errorMessages.push("メールアドレスは正しく入力してください。");
-          }
-          break;
-
-        case "message":
-          if (!value) {
-            errorMessages.push("お問い合わせ内容は必須入力です。");
-          }
-          break;
+      // エラーチェック実行
+      const rule = validationRules[fieldName];
+      if (rule) {
+        const error = rule();
+        if (error) errorMessages.push(error);
       }
     });
 
-    // 電話番号は任意フィールドなので別途チェック
+    // 電話番号の任意チェック
     const phoneField = form.querySelector('[name="phone"]');
-    if (phoneField && phoneField.value.trim() && !/^[0-9-]+$/.test(phoneField.value.trim())) {
-      errorMessages.push("電話番号には半角数字しか入力出来ません。");
+    if (phoneField && phoneField.value.trim()) {
+      const phoneValue = phoneField.value.trim();
+      if (!/^[0-9-]+$/.test(phoneValue)) {
+        errorMessages.push("電話番号には半角数字しか入力出来ません。");
+      }
     }
 
     return {
       isValid: errorMessages.length === 0,
-      errorMessage: errorMessages.length > 0 ? errorMessages.join("\n") : "",
+      errorMessage: errorMessages.join("\n")
     };
+  }
+
+  // ログインモーダルの初期化
+  initLoginModal() {
+    const signinButtons = document.querySelectorAll(".signin-btn, .ham-signin-btn");
+    const loginModal = document.getElementById("loginModal");
+    const closeButton = document.getElementById("loginClose");
+
+    if (!loginModal) return; // モーダルが存在しない場合は処理を終了
+
+    // サインインボタンクリック時の処理
+    signinButtons.forEach(button => {
+      button.addEventListener("click", (e) => {
+        e.preventDefault();
+        this.showLoginModal();
+      });
+    });
+
+    // 閉じるボタンクリック時の処理
+    if (closeButton) {
+      closeButton.addEventListener("click", () => {
+        this.hideLoginModal();
+      });
+    }
+
+    // モーダル背景クリック時の処理（モーダル外をクリックで閉じる）
+    loginModal.addEventListener("click", (e) => {
+      if (e.target === loginModal) {
+        this.hideLoginModal();
+      }
+    });
+
+    // ESCキーでモーダルを閉じる処理
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && loginModal.classList.contains("show")) {
+        this.hideLoginModal();
+      }
+    });
+  }
+
+  // ログインモーダルを表示
+  showLoginModal() {
+    const loginModal = document.getElementById("loginModal");
+    if (!loginModal) return;
+
+    // モーダルを表示
+    loginModal.style.display = "flex";
+    
+    // アニメーション用の少し遅延してshowクラスを追加
+    setTimeout(() => {
+      loginModal.classList.add("show");
+    }, 10);
+    
+    // 背景スクロールを無効化
+    document.body.style.overflow = "hidden";
+  }
+
+  // ログインモーダルを非表示
+  hideLoginModal() {
+    const loginModal = document.getElementById("loginModal");
+    if (!loginModal) return;
+
+    // 退場アニメーション用のクラスを追加
+    loginModal.classList.add("hiding");
+    loginModal.classList.remove("show");
+
+    // アニメーション完了後にモーダルを完全に非表示
+    setTimeout(() => {
+      loginModal.style.display = "none";
+      loginModal.classList.remove("hiding");
+      document.body.style.overflow = ""; // スクロール制限を解除
+    }, 600); // CSS transition時間と同期
   }
 }
 

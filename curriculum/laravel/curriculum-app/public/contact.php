@@ -16,8 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // バリデーション成功時は確認画面へ
         header('Location: confirm.php');
         exit;
+    } else {
+        // バリデーションエラー時もリダイレクトしてPRGパターンを実装
+        header('Location: contact.php');
+        exit;
     }
-    // バリデーションエラー時はそのまま表示
 }
 
 // メッセージとフォームデータを取得

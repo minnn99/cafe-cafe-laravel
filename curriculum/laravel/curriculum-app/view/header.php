@@ -55,4 +55,52 @@
             </div>
         </nav>
     </header>
+
+    <!-- ログインモーダル -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-modal-content">
+            <div class="login-header">
+                <h2>サインイン</h2>
+                <button class="login-close" id="loginClose">&times;</button>
+            </div>
+            <form class="login-form">
+                <div class="login-field">
+                    <label for="loginEmail">メールアドレス</label>
+                    <input type="email" id="loginEmail" name="email" required>
+                </div>
+                <div class="login-field">
+                    <label for="loginPassword">パスワード</label>
+                    <input type="password" id="loginPassword" name="password" required>
+                </div>
+                <div class="login-options">
+                    <label class="remember-me">
+                        <input type="checkbox" name="remember">
+                        <span>ログイン状態を保持する</span>
+                    </label>
+                    <a href="javascript:void(0);" class="forgot-password">パスワードを忘れた方</a>
+                </div>
+                <button type="submit" class="login-submit">サインイン</button>
+                <div class="login-divider">
+                    <span>または</span>
+                </div>
+                <button type="button" class="social-login google-login">
+                    <img src="img/google.png" alt="Google">
+                    Googleでサインイン
+                </button>
+                <button type="button" class="social-login facebook-login">
+                    <img src="img/fb.png" alt="Facebook">
+                    Facebookでサインイン
+                </button>
+                <button type="button" class="social-login apple-login">
+                    <img src="img/apple.png" alt="Apple">
+                    Appleでサインイン
+                </button>
+                <button type="button" class="social-login twitter-login">
+                    <img src="img/twitter.png" alt="Twitter">
+                    Twitterでサインイン
+                </button>
+            </form>
+        </div>
+    </div>
+
     <main class="main-content">

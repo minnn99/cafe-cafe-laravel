@@ -33,7 +33,7 @@ class ContactValidator
     if (empty($data['email'])) {
       $this->errors['email'] = 'メールアドレスは必須入力です。';
     } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-      $this->errors['email'] = 'メールアドレスは正しい形式で入力してください。';
+      $this->errors['email'] = 'メールアドレスは正しい形式でしか入力出来ません。';
     }
     
     // お問い合わせ内容の検証
