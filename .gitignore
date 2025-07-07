@@ -2,6 +2,24 @@
 mysql/
 !mysql/.gitkeep
 
+# Laravel 関連
+curriculum/laravel/curriculum-app/.env
+curriculum/laravel/curriculum-app/.env.backup
+curriculum/laravel/curriculum-app/.env.production
+curriculum/laravel/curriculum-app/vendor/
+curriculum/laravel/curriculum-app/node_modules/
+curriculum/laravel/curriculum-app/composer.lock
+curriculum/laravel/curriculum-app/package-lock.json
+curriculum/laravel/curriculum-app/storage/logs/*.log
+curriculum/laravel/curriculum-app/storage/framework/cache/*
+curriculum/laravel/curriculum-app/storage/framework/sessions/*
+curriculum/laravel/curriculum-app/storage/framework/views/*
+curriculum/laravel/curriculum-app/bootstrap/cache/*
+curriculum/laravel/curriculum-app/.phpunit.result.cache
+curriculum/laravel/curriculum-app/public/build/
+curriculum/laravel/curriculum-app/public/hot
+curriculum/laravel/curriculum-app/public/storage/
+
 # Docker ボリューム関連
 .DS_Store
 *.log
@@ -9,6 +27,8 @@ mysql/
 # IDE 関連
 .vscode/
 .idea/
+curriculum/laravel/curriculum-app/.vscode/
+curriculum/laravel/curriculum-app/.idea/
 
 # OS 関連
 Thumbs.db
