@@ -39,3 +39,35 @@ Thumbs.db
 *.tmp
 *.temp
 
+# MySQL データベースファイル
+mysql/
+!mysql/.gitkeep
+
+# Node.js 関連
+node_modules/
+package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Composer 関連
+composer.lock
+composer*.lock
+vendor/
+
+# Laravel 関連
+.env
+Homestead.yaml
+Homestead.json
+/public/hot
+/public/storage
+/storage/*.key
+/storage/app/public
+/storage/framework/cache/data
+/storage/framework/sessions
+/storage/framework/views
+/vendor
+/node_modules
+npm-debug.log*
+yarn-error.log*
+yarn-debug.log*
