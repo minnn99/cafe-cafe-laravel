@@ -76,7 +76,6 @@ class ContactController extends Controller
 
         try {
             // セキュリティチェック付きでデータベースに保存
-            $data['sent_at'] = now();
             
             // IPアドレスとUser-Agentもログに記録（個人情報は保存しない）
             Log::info('新規お問い合わせ送信', [

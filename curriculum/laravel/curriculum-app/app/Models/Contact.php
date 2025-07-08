@@ -16,14 +16,14 @@ class Contact extends Model
         'tel',
         'email',
         'body',
-        'sent_at',
     ];
 
     /**
      * 日付として扱う属性
      */
     protected $casts = [
-        'sent_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
     
     /**
