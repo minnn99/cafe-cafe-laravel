@@ -38,19 +38,19 @@
             </div>
 
             <div class="form-group">
-                <label for="furigana" class="form-label">
+                <label for="kana" class="form-label">
                     フリガナ<span class="required">*</span>
                 </label>
-                <div class="error-text" id="furigana-error">{{ $errors->first('furigana') }}</div>
-                <input type="text" placeholder="ヤマダタロウ" id="furigana" name="furigana" class="form-input" value="{{ old('furigana', $contact->furigana) }}" required>
+                <div class="error-text" id="kana-error">{{ $errors->first('kana') }}</div>
+                <input type="text" placeholder="ヤマダタロウ" id="kana" name="kana" class="form-input" value="{{ old('kana', $contact->kana) }}" required>
             </div>
 
             <div class="form-group">
-                <label for="phone" class="form-label">
+                <label for="tel" class="form-label">
                     電話番号
                 </label>
-                <div class="error-text" id="phone-error">{{ $errors->first('phone') }}</div>
-                <input type="tel" placeholder="09012345678" id="phone" name="phone" class="form-input" value="{{ old('phone', $contact->phone) }}">
+                <div class="error-text" id="tel-error">{{ $errors->first('tel') }}</div>
+                <input type="tel" placeholder="09012345678" id="tel" name="tel" class="form-input" value="{{ old('tel', $contact->tel) }}">
             </div>
 
             <div class="form-group">
@@ -62,11 +62,11 @@
             </div>
 
             <div class="form-group">
-                <label for="message" class="form-label">
+                <label for="body" class="form-label">
                     お問い合わせ内容をご記入ください<span class="required">*</span>
                 </label>
-                <div class="error-text" id="message-error">{{ $errors->first('message') }}</div>
-                <textarea id="message" name="message" class="form-textarea" rows="6" required>{{ old('message', $contact->message) }}</textarea>
+                <div class="error-text" id="body-error">{{ $errors->first('body') }}</div>
+                <textarea id="body" name="body" class="form-textarea" rows="6" required>{{ old('body', $contact->body) }}</textarea>
             </div>
 
             <div class="form-submit">

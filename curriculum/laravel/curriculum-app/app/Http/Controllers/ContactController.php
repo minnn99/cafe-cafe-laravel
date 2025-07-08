@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\ContactFormRequest;
 use App\Models\Contact;
+use Illuminate\Support\Facades\Log;
 
 class ContactController extends Controller
 {
@@ -73,20 +74,53 @@ class ContactController extends Controller
                            ->with('error', 'セッションが切れました。もう一度入力してください。');
         }
 
-        // データベースに保存
-        $data['sent_at'] = now();
-        Contact::create($data);
+        try {
+            // セキュリティチェック付きでデータベースに保存
+            $data['sent_at'] = now();
+            
+            // IPアドレスとUser-Agentもログに記録（個人情報は保存しない）
+            Log::info('新規お問い合わせ送信', [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'timestamp' => now(),
+            ]);
+            
+            Contact::create($data);
 
-        // ここでメール送信処理を行う
-        // Mail::to($data['email'])->send(new ContactMailConfirmation($data));
-        // Mail::to(config('mail.admin_email'))->send(new ContactMailNotification($data));
+            // ここでメール送信処理を行う
+            // Mail::to($data['email'])->send(new ContactMailConfirmation($data));
+            // Mail::to(config('mail.admin_email'))->send(new ContactMailNotification($data));
 
-        // セッションデータをクリア
-        session()->forget('contact_data');
+            // セッションデータをクリア
+            session()->forget('contact_data');
 
-        return redirect()->route('contact.index')
-                       ->with('success', 'お問い合わせを送信しました。ありがとうございます。')
-                       ->with('form_submitted', true);
+            return redirect()->route('contact.index')
+                           ->with('success', 'お問い合わせを送信しました。ありがとうございます。')
+                           ->with('form_submitted', true);
+                           
+        } catch (\InvalidArgumentException $e) {
+            // セキュリティ違反
+            Log::alert('お問い合わせ送信時にセキュリティ違反を検出', [
+                'error' => $e->getMessage(),
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'data' => $data,
+                'timestamp' => now(),
+            ]);
+            
+            return redirect()->route('contact.index')
+                           ->with('error', 'セキュリティ上の理由により、送信できませんでした。');
+        } catch (\Exception $e) {
+            // その他のエラー
+            Log::error('お問い合わせ送信エラー', [
+                'error' => $e->getMessage(),
+                'ip' => $request->ip(),
+                'timestamp' => now(),
+            ]);
+            
+            return redirect()->route('contact.index')
+                           ->with('error', 'システムエラーが発生しました。しばらく時間をおいてから再度お試しください。');
+        }
     }
 
     /**

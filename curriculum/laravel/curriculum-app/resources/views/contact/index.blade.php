@@ -41,19 +41,19 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="furigana" class="form-label">
+                    <label for="kana" class="form-label">
                         フリガナ<span class="required">*</span>
                     </label>
-                    <div class="error-text" id="furigana-error">{{ $errors->first('furigana') }}</div>
-                    <input type="text" placeholder="ヤマダタロウ" id="furigana" name="furigana" class="form-input" value="{{ old('furigana', session('contact_data.furigana')) }}" required>
+                    <div class="error-text" id="kana-error">{{ $errors->first('kana') }}</div>
+                    <input type="text" placeholder="ヤマダタロウ" id="kana" name="kana" class="form-input" value="{{ old('kana', session('contact_data.kana')) }}" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="phone" class="form-label">
+                    <label for="tel" class="form-label">
                         電話番号
                     </label>
-                    <div class="error-text" id="phone-error">{{ $errors->first('phone') }}</div>
-                    <input type="tel" placeholder="09012345678" id="phone" name="phone" class="form-input" value="{{ old('phone', session('contact_data.phone')) }}">
+                    <div class="error-text" id="tel-error">{{ $errors->first('tel') }}</div>
+                    <input type="tel" placeholder="09012345678" id="tel" name="tel" class="form-input" value="{{ old('tel', session('contact_data.tel')) }}">
                 </div>
 
                 <div class="form-group">
@@ -65,11 +65,11 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="message" class="form-label">
+                    <label for="body" class="form-label">
                         お問い合わせ内容をご記入ください<span class="required">*</span>
                     </label>
-                    <div class="error-text" id="message-error">{{ $errors->first('message') }}</div>
-                    <textarea id="message" name="message" class="form-textarea" rows="6" required>{{ old('message', session('contact_data.message')) }}</textarea>
+                    <div class="error-text" id="body-error">{{ $errors->first('body') }}</div>
+                    <textarea id="body" name="body" class="form-textarea" rows="6" required>{{ old('body', session('contact_data.body')) }}</textarea>
                 </div>
 
                 <div class="form-submit">
@@ -101,10 +101,10 @@
                     <tr>
                         <td>{{ $contact->id }}</td>
                         <td>{{ $contact->name }}</td>
-                        <td>{{ $contact->furigana }}</td>
-                        <td>{{ $contact->phone ?? '-' }}</td>
+                        <td>{{ $contact->kana }}</td>
+                        <td>{{ $contact->tel ?? '-' }}</td>
                         <td>{{ $contact->email }}</td>
-                        <td class="message-cell">{{ mb_strlen($contact->message) > 50 ? mb_substr($contact->message, 0, 50) . '...' : $contact->message }}</td>
+                        <td class="message-cell">{{ mb_strlen($contact->body) > 50 ? mb_substr($contact->body, 0, 50) . '...' : $contact->body }}</td>
                         <td class="action-buttons">
                             <a href="{{ route('contact.edit', $contact->id) }}" class="edit-btn">編集</a>
                             <form method="POST" action="{{ route('contact.destroy', $contact->id) }}" style="display: inline;" onsubmit="return confirm('本当に削除しますか？')">

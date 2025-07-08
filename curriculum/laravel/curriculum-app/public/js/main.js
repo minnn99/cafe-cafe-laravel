@@ -216,24 +216,26 @@ class CafeCafeApp {
             case "name":
                 if (!fieldValue) {
                     errorMessage =
-                        "氏名は必須入力です。10文字以内で入力してください。";
+                        "氏名は必須入力です。10文字以内でご入力ください。";
                 } else if (fieldValue.length > 10) {
-                    errorMessage = "氏名は10文字以内で入力してください。";
+                    errorMessage =
+                        "氏名は必須入力です。10文字以内でご入力ください。";
                 }
                 break;
 
-            case "furigana":
+            case "kana":
                 if (!fieldValue) {
                     errorMessage =
-                        "フリガナは必須入力です。10文字以内で入力してください。";
+                        "フリガナは必須入力です。10文字以内でご入力ください。";
                 } else if (fieldValue.length > 10) {
-                    errorMessage = "フリガナは10文字以内で入力してください。";
+                    errorMessage =
+                        "フリガナは必須入力です。10文字以内でご入力ください。";
                 } else if (!/^[ァ-ヶー]+$/.test(fieldValue)) {
                     errorMessage = "フリガナはカタカナで入力してください。";
                 }
                 break;
 
-            case "phone":
+            case "tel":
                 if (fieldValue && !/^[0-9-]+$/.test(fieldValue)) {
                     errorMessage = "電話番号には半角数字しか入力出来ません。";
                 }
@@ -242,12 +244,11 @@ class CafeCafeApp {
             case "email":
                 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!fieldValue || !emailPattern.test(fieldValue)) {
-                    errorMessage =
-                        "メールアドレスは正しい形式でしか入力出来ません。";
+                    errorMessage = "メールアドレスは正しくご入力ください。";
                 }
                 break;
 
-            case "message":
+            case "body":
                 if (!fieldValue) {
                     errorMessage = "お問い合わせ内容は必須入力です。";
                 }
@@ -277,8 +278,8 @@ class CafeCafeApp {
     clearError(field) {
         const errorElement = document.getElementById(field.name + "-error");
 
-        // フィールドに値が入力されている場合のみエラーをクリア
-        if (errorElement && field.value.trim()) {
+        // 入力中はエラーを一旦クリア（入力が完了したらblurでバリデーション実行）
+        if (errorElement) {
             errorElement.textContent = "";
             errorElement.classList.remove("show");
             field.classList.remove("error");
@@ -307,16 +308,16 @@ class CafeCafeApp {
             const validationRules = {
                 name: () => {
                     if (!fieldValue)
-                        return "氏名は必須入力です。10文字以内で入力してください。";
+                        return "氏名は必須入力です。10文字以内でご入力ください。";
                     if (fieldValue.length > 10)
-                        return "氏名は10文字以内で入力してください。";
+                        return "氏名は必須入力です。10文字以内でご入力ください。";
                     return "";
                 },
-                furigana: () => {
+                kana: () => {
                     if (!fieldValue)
-                        return "フリガナは必須入力です。10文字以内で入力してください。";
+                        return "フリガナは必須入力です。10文字以内でご入力ください。";
                     if (fieldValue.length > 10)
-                        return "フリガナは10文字以内で入力してください。";
+                        return "フリガナは必須入力です。10文字以内でご入力ください。";
                     if (!/^[ァ-ヶー]+$/.test(fieldValue))
                         return "フリガナはカタカナで入力してください。";
                     return "";
@@ -324,11 +325,11 @@ class CafeCafeApp {
                 email: () => {
                     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     if (!fieldValue || !emailPattern.test(fieldValue)) {
-                        return "メールアドレスは正しい形式でしか入力出来ません。";
+                        return "メールアドレスは正しくご入力ください。";
                     }
                     return "";
                 },
-                message: () => {
+                body: () => {
                     if (!fieldValue) return "お問い合わせ内容は必須入力です。";
                     return "";
                 },
@@ -343,7 +344,7 @@ class CafeCafeApp {
         });
 
         // 電話番号の任意チェック
-        const phoneField = form.querySelector('[name="phone"]');
+        const phoneField = form.querySelector('[name="tel"]');
         if (phoneField && phoneField.value.trim()) {
             const phoneValue = phoneField.value.trim();
             if (!/^[0-9-]+$/.test(phoneValue)) {

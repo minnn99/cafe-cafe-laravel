@@ -12,6 +12,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(\App\Http\Middleware\CSPMiddleware::class);
+        // 一時的にSQLインジェクション保護を無効化
+        // $middleware->web(\App\Http\Middleware\SQLInjectionProtectionMiddleware::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

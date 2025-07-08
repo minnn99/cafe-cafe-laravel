@@ -16,13 +16,13 @@
             
             <div class="confirm-item">
                 <label class="confirm-label">フリガナ</label>
-                <div class="confirm-value">{{ $data['furigana'] }}</div>
+                <div class="confirm-value">{{ $data['kana'] }}</div>
             </div>
             
-            @if(!empty($data['phone']))
+            @if(!empty($data['tel']))
             <div class="confirm-item">
                 <label class="confirm-label">電話番号</label>
-                <div class="confirm-value">{{ $data['phone'] }}</div>
+                <div class="confirm-value">{{ $data['tel'] }}</div>
             </div>
             @endif
             
@@ -33,7 +33,7 @@
             
             <div class="confirm-item">
                 <label class="confirm-label">お問い合わせ内容</label>
-                <div class="confirm-value message-content">{!! nl2br(e($data['message'])) !!}</div>
+                <div class="confirm-value message-content">{!! nl2br(e($data['body'])) !!}</div>
             </div>
         </div>
         

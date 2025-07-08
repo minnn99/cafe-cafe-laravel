@@ -39,23 +39,57 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // フォーム送信時の最終検証
         form.addEventListener("submit", function (e) {
-            let hasXSSAttempt = false;
+            let errors = [];
 
+            // 各フィールドのバリデーション（資料通り）
+            const nameInput = form.querySelector('input[name="name"]');
+            const kanaInput = form.querySelector('input[name="kana"]');
+            const emailInput = form.querySelector('input[name="email"]');
+            const bodyInput = form.querySelector('textarea[name="body"]');
+
+            // 氏名のバリデーション
+            if (!nameInput.value.trim()) {
+                errors.push("氏名は必須入力です。");
+            } else if (nameInput.value.length > 10) {
+                errors.push("10文字以内で入力してください。");
+            }
+
+            // フリガナのバリデーション
+            if (!kanaInput.value.trim()) {
+                errors.push("フリガナは必須入力です。");
+            } else if (kanaInput.value.length > 10) {
+                errors.push("10文字以内で入力してください。");
+            }
+
+            // メールアドレスのバリデーション
+            if (!emailInput.value.trim()) {
+                errors.push("メールアドレスは必須入力です。");
+            } else {
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(emailInput.value)) {
+                    errors.push(
+                        "メールアドレスは正しい形式でしか入力出来ません。",
+                    );
+                }
+            }
+
+            // お問い合わせ内容のバリデーション
+            if (!bodyInput.value.trim()) {
+                errors.push("お問い合わせ内容は必須入力です。");
+            }
+
+            // XSSチェック
             inputs.forEach((input) => {
                 if (containsXSS(input.value)) {
-                    hasXSSAttempt = true;
-                    showError(
-                        input,
+                    errors.push(
                         "セキュリティ上の問題により、この入力は受け付けられません。",
                     );
                 }
             });
 
-            if (hasXSSAttempt) {
+            if (errors.length > 0) {
                 e.preventDefault();
-                alert(
-                    "入力内容にセキュリティ上の問題があります。確認してください。",
-                );
+                alert(errors.join("\n"));
                 return false;
             }
         });
@@ -71,7 +105,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
                 return false;
             } else {
-                hideError(input);
+                // XSSチェックをパスした場合、エラーを自動的にクリアしない
+                // main.jsのバリデーションに任せる
                 return true;
             }
         }
