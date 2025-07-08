@@ -54,7 +54,6 @@
         </div>
         <div class="footer-copyright">
             <p>このサイトの素材は全て著作権フリーのものを使用しています。<br>
-            プライバシーポリシー 利用規約 サイトマップ 企業情報<br>
             &copy; 2021- LiNew, Inc. All rights reserved.</p>
         </div>
     </div>
