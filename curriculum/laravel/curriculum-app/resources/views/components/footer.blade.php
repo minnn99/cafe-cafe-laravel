@@ -47,12 +47,15 @@
             <a href="#"><img src="{{ asset('img/google.png') }}" alt="Google"></a>
         </div>
         <div class="footer-legal">
-            <a href="#">プライバシー</a>
+            <a href="#">プライバシーポリシー</a>
             <a href="#">利用規約</a>
             <a href="#">サイトマップ</a>
+            <a href="#">企業情報</a>
         </div>
         <div class="footer-copyright">
-            <p>&copy; 2023 CafeCafe, Inc. All rights reserved.</p>
+            <p>このサイトの素材は全て著作権フリーのものを使用しています。<br>
+            プライバシーポリシー 利用規約 サイトマップ 企業情報<br>
+            &copy; 2021- LiNew, Inc. All rights reserved.</p>
         </div>
     </div>
 </footer>
