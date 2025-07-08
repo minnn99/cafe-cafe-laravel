@@ -12,3 +12,6 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 Route::get('/contact/confirm', [ContactController::class, 'confirm'])->name('contact.confirm');
 Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');
 Route::post('/contact/back', [ContactController::class, 'back'])->name('contact.back');
+Route::get('/contact/{id}/edit', [ContactController::class, 'edit'])->name('contact.edit');
+Route::put('/contact/{id}', [ContactController::class, 'update'])->name('contact.update');
+Route::delete('/contact/{id}', [ContactController::class, 'destroy'])->name('contact.destroy');

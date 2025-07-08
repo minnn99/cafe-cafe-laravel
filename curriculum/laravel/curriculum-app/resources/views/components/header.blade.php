@@ -1,15 +1,15 @@
-{{-- contactページとconfirmページ以外の場合のみアラートを表示 --}}
+{{-- メインページ（home）の場合のみアラートを表示 --}}
 @php
     $current_route = request()->route()->getName();
 @endphp
 
-@if(!in_array($current_route, ['contact.index', 'contact.confirm']))
+@if($current_route === 'home')
 <div class="alert">
     <a href="javascript:void(0);">新型コロナウイルスに対する取り組みの最新情報をご案内</a>
 </div>
 @endif
 
-<header class="header {{ in_array($current_route, ['contact.index', 'contact.confirm']) ? 'scrolled contact-header' : '' }}">
+<header class="header {{ $current_route !== 'home' ? 'scrolled contact-header' : '' }}">
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
